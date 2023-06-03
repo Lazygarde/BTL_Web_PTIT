@@ -1,0 +1,16 @@
+.footer {
+    background: linear-gradient(to left, #0e0e0e,#013234);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .footer-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  
