@@ -1,0 +1,51 @@
+.cover {
+    height: 20rem;
+}
+
+.Bookdetail {
+    margin-top: 20px;
+}
+
+.title-author {
+    justify-content: space-around;
+    padding: 0.5rem;
+}
+
+.description {
+    margin-left: 2.2rem;
+    padding: 0.5rem;
+}
+
+#description {
+    width: 93%;
+}
+
+.date-pageNumber {
+    justify-content: space-around;
+    padding: 0.5rem;
+}
+
+.date {
+    margin-right: 3.6rem;
+}
+
+.category {
+    margin-left: 2.2rem;
+    padding: 0.5rem;
+}
+
+.upload-modal {
+    display: flex;
+    flex-direction: column;
+    margin-top: 4rem;
+}
+
+.img-url {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.img-file {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}

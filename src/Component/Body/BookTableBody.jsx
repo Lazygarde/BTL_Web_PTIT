@@ -80,7 +80,7 @@ const BookTableBody = () => {
                                     {localStorage.getItem("token") === "admin" && (
                                         <>
                                             <div className="d-flex justify-content-center">
-                                                <Link to={`/library/book/${bookItem.id}`} className="btn btn-primary">
+                                                <Link to={`/admin/book/${bookItem.id}`} className="btn btn-primary">
                                                     View
                                                 </Link>
                                             </div>
@@ -101,7 +101,7 @@ const BookTableBody = () => {
                 </table>
                 {localStorage.getItem("token") === "admin" && (
                     <div className="d-flex justify-content-center">
-                        <Link to={`/library/book/-1`} className="btn btn-primary">
+                        <Link to={`/admin/book/-1`} className="btn btn-primary">
                             Add new
                         </Link>
                     </div>
