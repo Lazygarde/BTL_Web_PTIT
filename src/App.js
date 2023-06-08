@@ -6,6 +6,7 @@ import LoginPage from './Component/LoginPage/LoginPage';
 import RegisterPage from './Component/RegisterPage/RegisterPage';
 import BookTableBody from './Component/Body/BookTableBody';
 import ClientHomePage from './Component/Body/ClientHomePage';
+import OrderList from './Component/Order/OrderList';
 import { Book } from './Component/BookDetail/Book';
 import { BookClient } from './Component/BookClient/BookClient';
 
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/library/book/:id" element={<BookClient />} />
         <Route path="/admin" element={<BookTableBody />} />
         <Route path="/admin/book/:id" element={<Book />} />
+        <Route path="/order" element={<OrderList />} />
       </Routes>
     </>
   );
