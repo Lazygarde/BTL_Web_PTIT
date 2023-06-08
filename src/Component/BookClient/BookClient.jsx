@@ -1,109 +1,93 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "./Book.css";
 
 export const BookClient = () => {
     const params = useParams();
     const id = params.id;
+
     const [bookItem, setBookItem] = useState({});
     const [category, setCategory] = useState([]);
     const [editing, setEditing] = useState(id < 0 ? true : false);
     const [quantity, setQuantity] = useState(1);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("");
-
     useEffect(() => {
         fetch(`http://localhost:8080/book/${id}`)
             .then((response) => response.json())
             .then((data) => setBookItem(data))
             .catch((err) => console.log(err));
-        
+
     }, []);
 
     const handleAddToCart = () => {
-        // Tạo một đối tượng chứa dữ liệu mua sách
-        const orderData = {
-            bookId: bookItem.id,
-            quantity: quantity
+        // Tạo đối tượng đại diện cho đơn hàng
+        const order = {
+            idUser: localStorage.getItem("userId"),
+            idBook: bookItem.id,
+            sum: quantity
         };
 
-        // Gửi dữ liệu mua sách lên server
-        fetch("http://localhost:8080/cart", {
-            method: 'POST',
+        // Thực hiện gửi yêu cầu đặt hàng đến máy chủ
+        fetch("http://localhost:8080/orders", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify(orderData),
+            body: JSON.stringify(order)
         })
-            .then((response) => response.json())
-            .then((data) => {
-                // Xử lý dữ liệu phản hồi từ server (nếu cần)
-                console.log('Order added:', data);
-                // Chuyển hướng đến trang giỏ hàng
-                window.location.href = "/cart";
+            .then((response) => {
+                if (response.ok) {
+                    alert("Order placed successfully");
+                    // Xử lý thành công
+                    console.log("Order placed successfully");
+                } else {
+                    alert("Failed to place order");
+                    // Xử lý lỗi
+                    console.log("Failed to place order");
+                }
             })
             .catch((error) => {
-                // Xử lý lỗi (nếu có)
-                console.error('Error:', error);
+                console.log("Error:", error);
             });
     };
 
-    const handleRatingChange = (e) => {
-        setRating(parseInt(e.target.value));
+
+
+    const handleQuantityChange = (event) => {
+        setQuantity(parseInt(event.target.value));
     };
 
-    const handleCommentChange = (e) => {
-        setComment(e.target.value);
+    const handleRatingChange = () => {
+        // Xử lý thay đổi rating
+    };
+
+    const handleCommentChange = () => {
+        // Xử lý thay đổi comment
     };
 
     const handleAddReview = () => {
-        // Tạo một đối tượng chứa dữ liệu đánh giá và nhận xét
-        const reviewData = {
-            bookId: bookItem.id,
-            rating: rating,
-            comment: comment
-        };
-
-        // Gửi dữ liệu đánh giá và nhận xét lên server
-        fetch("http://localhost:8080/review", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reviewData),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                // Xử lý dữ liệu phản hồi từ server (nếu cần)
-                console.log('Review added:', data);
-                // Reset dữ liệu đánh giá và nhận xét
-                setRating(0);
-                setComment("");
-            })
-            .catch((error) => {
-                // Xử lý lỗi (nếu có)
-                console.error('Error:', error);
-            });
+        // Xử lý thêm đánh giá
     };
 
     return (
         <div className="container">
             <div className="row">
                 <div className="col-4">
-                    <img src={bookItem.image} alt={bookItem.title} className="img-fluid" />
+                    <img src={bookItem.cover} alt={bookItem.title} className="img-fluid" />
                 </div>
                 <div className="col-8">
                     <h1>{bookItem.title}</h1>
                     <p>Author: {bookItem.author}</p>
-                    <p>Price: {bookItem.price}</p>
-                    <p>Category: {bookItem.category?.name}</p>
-                    <p>Quantity: {bookItem.quantity}</p>
+                    <p>Category: {bookItem.category}</p>
                     <p>Description: {bookItem.description}</p>
-                    <p>
-                        <button className="btn btn-primary" onClick={handleAddToCart}>Add to cart</button>
-                    </p>
+                    <div className="d-flex align-items-center">
+                        <label htmlFor="quantity" className="mr-2">Quantity:</label>
+                        <input type="number" id="quantity" min="1" value={quantity} onChange={handleQuantityChange} style={{ maxWidth: "100px" }} />
+                        <button className="btn btn-primary ml-2" onClick={handleAddToCart}>Add to cart</button>
+                    </div>
                 </div>
             </div>
+
             <div className="row">
                 <div className="col-12">
                     <h2>Reviews</h2>
@@ -142,6 +126,5 @@ export const BookClient = () => {
                 </div>
             </div>
         </div>
-
     );
 };

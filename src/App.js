@@ -16,7 +16,7 @@ const App = () => {
         <Route path="/library/login" element={<LoginPage />} />
         <Route path="/library/register" element={<RegisterPage />} />
         <Route path="/library" element={<MainPage />} />
-        <Route path="/library/book:id" element={<BookClient />} />
+        <Route path="/library/book/:id" element={<BookClient />} />
         <Route path="/admin" element={<BookTableBody />} />
         <Route path="/admin/book/:id" element={<Book />} />
       </Routes>
@@ -29,7 +29,7 @@ const MainPage = () => {
   return (
     <>
       <Header />
-      <ClientHomePage />
+      {localStorage.getItem("token") === "admin" ? <BookTableBody /> : <ClientHomePage />}
       <Footer />
     </>
   );

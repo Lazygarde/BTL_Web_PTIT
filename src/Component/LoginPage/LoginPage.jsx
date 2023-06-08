@@ -25,7 +25,7 @@ const LoginPage = () => {
           // Xử lý đăng nhập thành công cho vai trò admin
           alert('Đăng nhập thành công');
           localStorage.setItem('token', token);
-          navigate('/admin')
+          navigate('/library')
           // Chuyển hướng đến trang chính hoặc trang khác
         } else if (token === "client") {
           alert('Đăng nhập thành công');
@@ -41,6 +41,11 @@ const LoginPage = () => {
       .catch((error) => {
         // Xử lý lỗi
         alert(error);
+      });
+    fetch(`http://localhost:8080/api/user/id?username=${username}&password=${password}`)
+      .then((response) => response.text())
+      .then((id) => {
+        localStorage.setItem('userId', id);
       });
   };
 
