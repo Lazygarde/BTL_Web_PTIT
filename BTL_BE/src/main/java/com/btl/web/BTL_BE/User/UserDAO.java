@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 public class UserDAO extends DAO {
 

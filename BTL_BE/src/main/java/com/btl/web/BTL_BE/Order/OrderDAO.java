@@ -1,7 +1,6 @@
 package com.btl.web.BTL_BE.Order;
 
 import com.btl.web.BTL_BE.DAO;
-import static com.btl.web.BTL_BE.DAO.con;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -110,6 +109,28 @@ public class OrderDAO extends DAO {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public ResponseEntity<?> getOrderByUserId(int id) {
+        List<Order> orders = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM orders WHERE idUser = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                int idOrder = result.getInt("id");
+                int idUser = result.getInt("idUser");
+                int idBook = result.getInt("idBook");
+                int sum = result.getInt("sum");
+                orders.add(new Order(idOrder, idUser, idBook, sum));
+            }
+            ps.close();
+            return ResponseEntity.ok().body(orders);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
