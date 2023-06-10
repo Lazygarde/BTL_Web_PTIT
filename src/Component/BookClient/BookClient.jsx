@@ -67,6 +67,7 @@ export const BookClient = () => {
     const handleCommentChange = (event) => {
         setComment(event.target.value);
     };
+    
 
     const handleAddReview = () => {
         if (rating === 0 || comment.trim() === "") {
