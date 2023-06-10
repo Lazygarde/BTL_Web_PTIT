@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
-const OrderList = () => {
+const OrderAdmin = () => {
     const [orders, setOrders] = useState([]);
     const [bookItems, setBookItems] = useState({});
 
@@ -13,7 +13,7 @@ const OrderList = () => {
     const fetchOrders = async () => {
         try {
             const userId = localStorage.getItem("userId");
-            const response = await fetch(`http://localhost:8080/orders/id?userId=${userId}`);
+            const response = await fetch(`http://localhost:8080/orders`);
             const data = await response.json();
             setOrders(data);
             fetchBooks(data);
@@ -102,4 +102,4 @@ const OrderList = () => {
     );
 };
 
-export default OrderList;
+export default OrderAdmin;

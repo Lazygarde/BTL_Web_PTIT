@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <>
     <footer className="footer">
-      <span className="footer-text">Đây là footer</span>
+      <span className="footer-text">footer</span>
     </footer>
     </>
   );

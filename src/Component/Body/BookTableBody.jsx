@@ -55,16 +55,23 @@ const BookTableBody = () => {
         <div>
             <div className="container">
                 <br></br>
+                {/* {localStorage.getItem("token") === "admin" && (
+                    <div className="d-flex justify-content-center">
+                        <Link to={`/admin/book/-1`} className="btn btn-primary">
+                            Add new
+                        </Link>
+                    </div>
+                )} */}
                 <table className="table table-striped table-bordered">
                     <thead className="table-dark">
                         <tr>
-                            <th className="text-center">Title</th>
-                            <th className="text-center">Author</th>
-                            <th className="text-center">Category</th>
-                            <th className="text-center">Release</th>
-                            <th className="text-center">Page Number</th>
-                            <th className="text-center">Sold Quantity</th>
-                            <th className="text-center">Action</th>
+                            <th className="text-center">Tiêu đề</th>
+                            <th className="text-center">Tác giả</th>
+                            <th className="text-center">Thể loại</th>
+                            <th className="text-center">Ngày phát hành</th>
+                            <th className="text-center">Số trang</th>
+                            <th className="text-center">Số lượng đã bán</th>
+                            <th className="text-center"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -99,13 +106,7 @@ const BookTableBody = () => {
                         ))}
                     </tbody>
                 </table>
-                {localStorage.getItem("token") === "admin" && (
-                    <div className="d-flex justify-content-center">
-                        <Link to={`/admin/book/-1`} className="btn btn-primary">
-                            Add new
-                        </Link>
-                    </div>
-                )}
+                
             </div>
         </div>
     );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Book.css";
 
 export const Book = () => {
@@ -12,6 +13,7 @@ export const Book = () => {
   const [uploadedImage, setUploadedImage] = useState("");
   const [editing, setEditing] = useState(id < 0 ? true : false);
   const [editingCover, setEditingCover] = useState(false);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export const Book = () => {
       description: bookItem.description,
       releaseDate: bookItem.releaseDate,
       pageNumber: bookItem.pageNumber,
-      idCategory: bookItem.category,
+      idCategory: bookItem.idCategory,
       cover: bookItem.cover
     };
 
@@ -51,7 +53,7 @@ export const Book = () => {
         // Cập nhật trạng thái và chuyển hướng đến trang chi tiết sách
         setIsAdding(false);
         // Chuyển hướng đến trang chi tiết sách với ID mới
-        window.location.href = `/book/${data.id}`;
+        window.location.href = `/library`;
       })
       .catch((error) => {
         // Xử lý lỗi (nếu có)
@@ -260,7 +262,9 @@ export const Book = () => {
                 </div>
               ) : (
                 <>
-                  <button onClick={() => setEditingCover(true)}>Edit Cover</button>
+                  {editing && (<button onClick={() => setEditingCover(true)}>Edit Cover</button>
+                  )}
+
                   {bookItem.cover && (
                     <img className="cover" src={bookItem.cover} alt="bìa sách" />
                   )}

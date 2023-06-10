@@ -7,8 +7,9 @@ import RegisterPage from './Component/RegisterPage/RegisterPage';
 import BookTableBody from './Component/Body/BookTableBody';
 import ClientHomePage from './Component/Body/ClientHomePage';
 import OrderList from './Component/Order/OrderList';
-import { Book } from './Component/BookDetail/Book';
+import { Book } from './Component/BookAdmin/Book';
 import { BookClient } from './Component/BookClient/BookClient';
+import OrderAdmin from './Component/OrderAdmin/OrderAdmin';
 
 const App = () => {
   return (
@@ -41,7 +42,7 @@ const OrderPage = () => {
   return (
     <>
       <Header />
-      <OrderList />
+      {localStorage.getItem("token") === "admin" ? <OrderAdmin /> : <OrderList />}
       <Footer />
     </>
   );

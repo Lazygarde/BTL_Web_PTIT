@@ -8,7 +8,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.btl.web.BTL_BE.DAO;
+import static com.btl.web.BTL_BE.DAO.con;
 import com.btl.web.BTL_BE.User.UserDAO;
+import java.sql.SQLException;
 
 public class RatingDAO extends DAO{
     public static String SELECT_ALL_RATING = "SELECT * FROM rating";
@@ -25,8 +27,7 @@ public class RatingDAO extends DAO{
                 int idUser = result.getInt("idUser");
                 int starCnt = result.getInt("starCnt");
                 String comment = result.getString("comment");
-                UserDAO userDAO = new UserDAO();
-                String userName = userDAO.getName(String.format("%d", id));
+                String userName = this.getName(String.format("%d", id));
                 ratings.add(new Rating(id, idBook, idUser, starCnt, comment, userName));
             }
             ps.close();
@@ -49,8 +50,7 @@ public class RatingDAO extends DAO{
                 int idUser = result.getInt("idUser");
                 int starCnt = result.getInt("starCnt");
                 String comment = result.getString("comment");
-                UserDAO userDAO = new UserDAO();
-                String userName = userDAO.getName(String.format("%d", idUser));
+                String userName = this.getName(String.format("%d", id));
                 rating = new Rating(Integer.parseInt(id), idBook, idUser, starCnt, comment, userName);
             }
             ps.close();
@@ -136,8 +136,7 @@ public class RatingDAO extends DAO{
                 int idUser1 = result.getInt("idUser");
                 int starCnt = result.getInt("starCnt");
                 String comment = result.getString("comment");
-                UserDAO userDAO = new UserDAO();
-                String userName = userDAO.getName(String.format("%d", id));
+                String userName = this.getName(String.format("%d", id));
                 ratings.add(new Rating(id, idBook1, idUser1, starCnt, comment, userName));
             }
             ps.close();
@@ -161,8 +160,7 @@ public class RatingDAO extends DAO{
                 int idUser = result.getInt("idUser");
                 int starCnt = result.getInt("starCnt");
                 String comment = result.getString("comment");
-                UserDAO userDAO = new UserDAO();
-                String userName = userDAO.getName(String.format("%d", id));
+                String userName = this.getName(String.format("%d", id));
                 ratings.add(new Rating(id, idBook1, idUser, starCnt, comment, userName));
             }
             ps.close();
@@ -171,6 +169,24 @@ public class RatingDAO extends DAO{
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
+    }
+    
+    public String getName(String id) {
+        try{
+            String query = "select * from user where id = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getString("userName");
+            }
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
