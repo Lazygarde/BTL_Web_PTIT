@@ -6,17 +6,22 @@ export const BookClient = () => {
     const id = params.id;
 
     const [bookItem, setBookItem] = useState({});
-    const [category, setCategory] = useState([]);
-    const [editing, setEditing] = useState(id < 0 ? true : false);
     const [quantity, setQuantity] = useState(1);
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("");
+    const [reviews, setReviews] = useState([]);
+    const [userName, setUserName] = useState("");
+
     useEffect(() => {
         fetch(`http://localhost:8080/book/${id}`)
             .then((response) => response.json())
             .then((data) => setBookItem(data))
             .catch((err) => console.log(err));
 
+        fetch(`http://localhost:8080/rating/idBook?idBook=${id}`)
+            .then((response) => response.json())
+            .then((data) => setReviews(data))
+            .catch((err) => console.log(err));
     }, []);
 
     const handleAddToCart = () => {
@@ -51,23 +56,55 @@ export const BookClient = () => {
             });
     };
 
-
-
     const handleQuantityChange = (event) => {
         setQuantity(parseInt(event.target.value));
     };
 
-    const handleRatingChange = () => {
-        // Xử lý thay đổi rating
+    const handleRatingChange = (event) => {
+        setRating(parseInt(event.target.value));
     };
 
-    const handleCommentChange = () => {
-        // Xử lý thay đổi comment
+    const handleCommentChange = (event) => {
+        setComment(event.target.value);
     };
 
     const handleAddReview = () => {
-        // Xử lý thêm đánh giá
+        if (rating === 0 || comment.trim() === "") {
+            alert("Please select a rating and enter a comment");
+            return;
+        }
+
+        const newReview = {
+            idBook: id,
+            idUser: localStorage.getItem("userId"),
+            starCnt: rating,
+            comment: comment
+        };
+
+        fetch("http://localhost:8080/rating", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newReview)
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("Review added successfully");
+                    setReviews([...reviews, newReview]);
+                    setRating(0);
+                    setComment("");
+                } else {
+                    alert("Failed to add review");
+                    console.log("Failed to add review");
+                }
+            })
+            .catch((error) => {
+                console.log("Error:", error);
+            });
     };
+
+
 
     return (
         <div className="container">
@@ -91,7 +128,7 @@ export const BookClient = () => {
             <div className="row">
                 <div className="col-12">
                     <h2>Reviews</h2>
-                    <div className="row">
+                    <div className="row mb-3">
                         <div className="col-12">
                             <div className="form-group">
                                 <label htmlFor="rating">Rating</label>
@@ -114,9 +151,14 @@ export const BookClient = () => {
                     <div className="row">
                         <div className="col-12">
                             <ul className="list-group">
-                                {bookItem.reviews?.map((review) => (
-                                    <li className="list-group-item" key={review.id}>
-                                        <p>Rating: {review.rating}</p>
+                                {reviews.map((review) => (
+                                    <li className="list-group-item mb-3" key={review.id}>
+                                        <div className="d-flex align-items-center">
+                                            <p className="mr-3">User: {
+                                                //username
+                                            }</p>
+                                            <p>Rating: {review.starCnt}</p>
+                                        </div>
                                         <p>Comment: {review.comment}</p>
                                     </li>
                                 ))}

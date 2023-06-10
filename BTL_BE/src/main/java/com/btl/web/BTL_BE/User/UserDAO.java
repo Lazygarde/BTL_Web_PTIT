@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
 
 public class UserDAO extends DAO {
 
@@ -26,6 +30,33 @@ public class UserDAO extends DAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ResponseEntity<?> getUser(String userName, String password) {
+        List<User> users = new ArrayList<>();
+        try {
+            String querry = "select * from user where username = ? and password = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(querry);
+            preparedStatement.setString(1, userName);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String username = resultSet.getString("username");
+                String pass = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                int role = resultSet.getInt("role");
+                User user = new User(id, username, pass, role, email);
+                users.add(user);
+            }
+            preparedStatement.close();
+            return ResponseEntity.ok().body(users);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } 
+
     }
 
     public boolean isUserExists(String username) {
@@ -64,8 +95,8 @@ public class UserDAO extends DAO {
 
         return false;
     }
-    
-    public int getId(String username, String password){
+
+    public int getId(String username, String password) {
         String query = "SELECT id FROM User WHERE username = ? AND password = ?";
 
         try {
@@ -98,5 +129,23 @@ public class UserDAO extends DAO {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public String getName(String id) {
+        try{
+            String query = "select * from user where id = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getString("userName");
+            }
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

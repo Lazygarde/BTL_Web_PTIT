@@ -34,6 +34,11 @@ public class UserController {
         return userDAO.getId(username, password);
     }
 
+    @GetMapping("api/user/userName")
+    public String getUserName(@RequestParam("id") String id) {
+        return userDAO.getName(id);
+    }
+
     @GetMapping("api/register")
     public boolean register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email) {
         if (userDAO.isUserExists(username)) {
